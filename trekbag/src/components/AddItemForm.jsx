@@ -1,7 +1,10 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Button from "./Button";
+import { ItemsContext } from "../context/ItemsContextProvider";
 
-export default function AddItemForm({ onAddItem }) {
+export default function AddItemForm() {
+  const { handleAddItem } = useContext(ItemsContext);
+
   const [itemText, setItemText] = useState("");
   const inputRef = useRef();
 
@@ -13,7 +16,7 @@ export default function AddItemForm({ onAddItem }) {
       return;
     }
 
-    onAddItem(itemText);
+    handleAddItem(itemText);
     setItemText("");
   };
 

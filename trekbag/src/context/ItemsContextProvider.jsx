@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { initialItems } from "../lib/constants";
 
-export default function ItemsContextProvider() {
+export const ItemsContext = createContext();
+
+export default function ItemsContextProvider({ children }) {
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("items")) || initialItems
   );
@@ -53,5 +55,20 @@ export default function ItemsContextProvider() {
     localStorage.setItem("items", JSON.stringify(items));
   }, [items]);
 
-  return <div>ItemsContextProvider</div>;
+  return (
+    <ItemsContext.Provider
+      value={{
+        items,
+        handleAddItem,
+        handleRemoveAllItems,
+        handleResetToInitialItems,
+        handleMarkAllAsCompleted,
+        handleMarkAllAsIncomplete,
+        handleDeleteItem,
+        handleToggleItem,
+      }}
+    >
+      {children}
+    </ItemsContext.Provider>
+  );
 }

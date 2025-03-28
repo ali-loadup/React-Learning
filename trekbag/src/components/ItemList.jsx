@@ -1,17 +1,16 @@
 import Select from "react-select";
 import { sortingOptions } from "../lib/constants.js";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
+import { ItemsContext } from "../context/ItemsContextProvider.jsx";
 
-export default function ItemList({
-  itemList,
-  handleToggleItem,
-  handleDeleteItem,
-}) {
+export default function ItemList() {
+  const { items, handleToggleItem, handleDeleteItem } =
+    useContext(ItemsContext);
   const [sortBy, setSortBy] = useState(sortingOptions[0]);
 
   const sortelList = useMemo(
     () =>
-      [...itemList].sort((a, b) => {
+      [...items].sort((a, b) => {
         if (sortBy.value === "unpacked") {
           return a.packed - b.packed;
         } else if (sortBy.value === "packed") {
@@ -19,14 +18,14 @@ export default function ItemList({
         }
         return;
       }),
-    [itemList, sortBy]
+    [items, sortBy]
   );
 
   return (
     <ul className="item-list">
-      {itemList.length === 0 && <li>No items in your list</li>}
+      {items.length === 0 && <li>No items in your list</li>}
 
-      {itemList.length > 0 ? (
+      {items.length > 0 ? (
         <section className="sorting">
           <Select
             options={sortingOptions}
