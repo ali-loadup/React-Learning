@@ -1,0 +1,1 @@
+export const  MaxLengthOfText = 150;
