@@ -1,5 +1,5 @@
 import Feedback from "./Feedback";
-import Spinner from "./Spinner";
+import Spinner from "../Spinner";
 
 export default function FeedbackList({ feedbacks, loading }) {
   return (

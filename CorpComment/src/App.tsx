@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Container from "./components/Container";
-import Footer from "./components/Footer";
+import Container from "./components/Layout/Container";
+import Footer from "./components/Layout/Footer";
 import HashtagList from "./components/HashtagList";
 import { FeedbackType } from "./types/FeedbackType";
 

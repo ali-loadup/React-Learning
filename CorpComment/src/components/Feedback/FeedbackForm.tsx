@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { MaxLengthOfText } from "../constants";
-import { FeedbackType } from "../types/FeedbackType";
+import { MaxLengthOfText } from "../../constants";
+import { FeedbackType } from "../../types/FeedbackType";
 
 export default function FeedbackForm({ handleAddFeedback }) {
   const [text, setText] = useState<string>("");
