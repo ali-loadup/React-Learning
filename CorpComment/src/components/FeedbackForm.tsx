@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { MaxLengthOfText } from "../constants";
+import { FeedbackType } from "../types/FeedbackType";
 
-export default function FeedbackForm() {
+export default function FeedbackForm({ handleAddFeedback }) {
   const [text, setText] = useState<string>("");
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    handleAddFeedback(text);
+    setText("");
+  };
 
   return (
     <form className="form">
@@ -23,7 +30,7 @@ export default function FeedbackForm() {
       </label>
       <div>
         <p className="u-italic">{MaxLengthOfText - text.length}</p>
-        <button>
+        <button onClick={onSubmit}>
           <span>submit</span>
         </button>
       </div>

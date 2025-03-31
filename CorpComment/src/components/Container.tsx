@@ -1,11 +1,11 @@
 import FeedbackList from "./FeedbackList";
 import Header from "./Header";
 
-export default function Container() {
+export default function Container({ feedbacks, loading, handleAddFeedback }) {
   return (
     <main className="container">
-        <Header></Header>
-        <FeedbackList></FeedbackList>
+      <Header handleAddFeedback={handleAddFeedback}></Header>
+      <FeedbackList feedbacks={feedbacks} loading={loading}></FeedbackList>
     </main>
-  )
+  );
 }
