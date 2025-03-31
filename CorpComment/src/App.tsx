@@ -7,6 +7,12 @@ import { FeedbackType } from "./types/FeedbackType";
 function App() {
   const [feedbacks, setFeedbacks] = useState<FeedbackType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<string>("");
+
+  const fileteredFeedbacks =
+    selectedCompany !== ""
+      ? feedbacks.filter((feedback) => feedback.company === selectedCompany)
+      : feedbacks;
 
   const handleAddFeedback = (feedbackText: string) => {
     const companyName = feedbackText
@@ -69,12 +75,17 @@ function App() {
         <Footer />
 
         <Container
-          feedbacks={feedbacks}
+          feedbacks={fileteredFeedbacks}
           loading={loading}
           handleAddFeedback={handleAddFeedback}
+          selectedCompany={selectedCompany}
         />
 
-        <HashtagList></HashtagList>
+        <HashtagList
+          feedbacks={feedbacks}
+          setSelectedCompany={setSelectedCompany}
+          selectedCompany={selectedCompany}
+        ></HashtagList>
       </div>
     </>
   );
