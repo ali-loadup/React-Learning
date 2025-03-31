@@ -14,7 +14,7 @@ export default function Feedback({ item }: FeedbackTypeProp) {
       </div>
 
       <div>
-        <p>{item.companyName}</p>
+        <p>{item.company}</p>
         <p>{item.text}</p>
       </div>
 

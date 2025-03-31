@@ -19,11 +19,24 @@ function App() {
       text: feedbackText,
       upvoteCount: 0,
       badgeLetter: companyName.charAt(0).toUpperCase(),
-      companyName: companyName,
+      company: companyName,
       daysAgo: 0,
     };
 
     setFeedbacks([...feedbacks, newFeedback]);
+
+    //submit to server
+    fetch(
+      "https://bytegrad.com/course-assets/projects/corpcomment/api/feedbacks",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newFeedback),
+      }
+    );
   };
 
   useEffect(() => {
