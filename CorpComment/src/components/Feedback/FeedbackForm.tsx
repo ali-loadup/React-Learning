@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { MaxLengthOfText } from "../../constants";
-import { FeedbackType } from "../../types/FeedbackType";
+import { useFeedbackItemsContext } from "../../FeedbackItemsContextProvider";
 
-export default function FeedbackForm({ handleAddFeedback }) {
+export default function FeedbackForm() {
+  const context = useFeedbackItemsContext();
+  if (!context) {
+    throw new Error("FeedbackContext is not provided");
+  }
+  const { handleAddFeedback } = context;
+
   const [text, setText] = useState<string>("");
 
   const onSubmit = (e) => {

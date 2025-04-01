@@ -3,7 +3,8 @@ import PageHeading from "../PageHeading";
 import Pattern from "../Pattern";
 import FeedbackForm from "../Feedback/FeedbackForm";
 
-export default function Header({ handleAddFeedback }) {
+export default function Header() {
+
   return (
     <>
       <header>
@@ -11,7 +12,7 @@ export default function Header({ handleAddFeedback }) {
         <Logo></Logo>
         <PageHeading></PageHeading>
 
-        <FeedbackForm handleAddFeedback={handleAddFeedback}></FeedbackForm>
+        <FeedbackForm ></FeedbackForm>
       </header>
     </>
   );
