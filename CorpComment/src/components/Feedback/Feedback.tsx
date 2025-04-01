@@ -1,12 +1,25 @@
 import { TriangleUpIcon } from "@radix-ui/react-icons";
 import { FeedbackTypeProp } from "../../types/FeedbackTypeProp";
+import { useState } from "react";
 
 export default function Feedback({ item }: FeedbackTypeProp) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [upVoteCount, setUpVoteCount] = useState(item.upvoteCount);
+
   return (
-    <li className="feedback">
-      <button>
+    <li
+      className={`feedback ${isOpen === true && "feedback--expand"}`}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <button
+        onClick={(e) => {
+          setUpVoteCount(upVoteCount + 1);
+          e.stopPropagation();
+          e.currentTarget.disabled = true;
+        }}
+      >
         <TriangleUpIcon />
-        <span>{item.upvoteCount}</span>
+        <span>{upVoteCount}</span>
       </button>
 
       <div>
