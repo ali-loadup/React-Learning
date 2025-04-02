@@ -1,15 +1,23 @@
-import { useDataContext } from "../context/DataContextProvider";
+import { Job } from "../models/job";
 import JobListItem from "./JobListItem";
+import Spinner from "./Spinner";
 
-export function JobList() {
-  const { jobs } = useDataContext();
+type JobListProps = {
+  jobs: Job[];
+  isLoading: boolean;
+};
 
+export function JobList({ jobs, isLoading }: JobListProps) {
   return (
-    <ul className="job-list">
-      {jobs?.map((job) => (
-        <JobListItem key={job.id} job={job}></JobListItem>
-      ))}
-    </ul>
+    <>
+      <ul className="job-list">
+        {isLoading == true ? (
+          <Spinner />
+        ) : (
+          jobs?.map((job) => <JobListItem key={job.id} job={job}></JobListItem>)
+        )}
+      </ul>
+    </>
   );
 }
 

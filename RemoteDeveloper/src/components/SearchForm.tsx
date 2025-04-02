@@ -1,8 +1,12 @@
-import { useDataContext } from "../context/DataContextProvider";
+type SearchFormProps = {
+  searchText: string;
+  setSearchText: (searchText: string) => void;
+};
 
-export default function SearchForm() {
-  const { getData } = useDataContext();
-
+export default function SearchForm({
+  searchText,
+  setSearchText,
+}: SearchFormProps) {
   return (
     <form
       action="#"
@@ -16,12 +20,13 @@ export default function SearchForm() {
       </button>
 
       <input
+        value={searchText}
         spellCheck="false"
         type="text"
         required
         placeholder="Find remote developer jobs..."
         onChange={(e) => {
-          getData(e.target.value);
+          setSearchText(e.target.value);
         }}
       />
     </form>
