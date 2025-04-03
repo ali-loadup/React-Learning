@@ -9,7 +9,6 @@ type JobListProps = {
 };
 
 export function JobList({ jobs, isLoading }: JobListProps) {
-  console.log("JobList rendered with jobs:", jobs);
 
   const activeId = useActiveId();
   return (

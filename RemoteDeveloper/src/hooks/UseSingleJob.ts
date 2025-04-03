@@ -1,30 +1,31 @@
-import React, { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { BASE_API_URL } from "../lib/constant";
 import { JobExpanded } from "../models/jobExpanded";
 
-export default function useSingleJob(id: number) {
-  const [jobItem, setJobItem] = React.useState<JobExpanded | null>(null);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+type JobItemApiResponse = {
+  public: boolean;
+  jobItem: JobExpanded;
+};
 
-  useEffect(() => {
-    if (!id) return;
-    setIsLoading(true);
-    const getData = async () => {
-      console.warn("getData called with ID:", id);
+const fetchJobSingleJob = async (id: number): Promise<JobItemApiResponse> => {
+  const response = await fetch(`${BASE_API_URL}/${id}`);
+  const data = await response.json();
+  return data;
+};
 
-      const response = await fetch(`${BASE_API_URL}/${id}`);
-
-      setIsLoading(false);
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      setJobItem(data.jobItem);
-      console.log("Active Job:", data.jobItem);
-    };
-    getData();
-  }, [id]);
-
+export default function useSingleJob(id: number | null) {
+  const { data, isInitialLoading } = useQuery(
+    ["job-item", id],
+    () => (id ? fetchJobSingleJob(id) : null),
+    {
+      staleTime: 5000,
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: !!id,
+      onError: () => {},
+    }
+  );
+  const jobItem = data?.jobItem;
+  const isLoading = isInitialLoading;
   return { jobItem, isLoading };
 }

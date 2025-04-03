@@ -12,7 +12,7 @@ export default function JobItemContent() {
     return (
       <section className="job-details">
         <div>
-          <Spinner />;
+          <Spinner />
         </div>
       </section>
     );
