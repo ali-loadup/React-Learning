@@ -1,6 +1,7 @@
 import { BASE_API_URL } from "../lib/constant";
 import { Job } from "../models/job";
 import { useQuery } from "@tanstack/react-query";
+import { handleError } from "../utils/errorHandler";
 
 type getJobsApiResponse = {
   public: boolean;
@@ -13,7 +14,8 @@ const getData = async (searchText: string): Promise<getJobsApiResponse> => {
   if (searchText.length > 0) url += `?search=${searchText}`;
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    const errorData = await response.json();
+    throw new Error(errorData.description);
   }
   const data = await response.json();
 
@@ -29,7 +31,7 @@ export default function useJobs(searchText: string) {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: !!searchText,
-      onError: () => {},
+      onError: handleError,
     }
   );
 

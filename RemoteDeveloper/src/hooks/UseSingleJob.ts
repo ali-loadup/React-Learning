@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { BASE_API_URL } from "../lib/constant";
 import { JobExpanded } from "../models/jobExpanded";
+import { handleError } from "../utils/errorHandler";
 
 type JobItemApiResponse = {
   public: boolean;
@@ -26,7 +27,7 @@ export default function useSingleJob(id: number | null) {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: !!id,
-      onError: () => {},
+      onError: handleError,
     }
   );
   const jobItem = data?.jobItem;
