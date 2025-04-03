@@ -1,12 +1,11 @@
-import { SortBy } from "../models/sortBy";
+import { SortBy } from "../types/sortBy";
 
 type SortingProps = {
   onClick: (sortBy: SortBy) => void;
   sortBy: SortBy;
 };
 
-
-export default function Sorting({ onClick, sortBy }:SortingProps) {
+export default function Sorting({ onClick, sortBy }: SortingProps) {
   return (
     <section className="sorting">
       <i className="fa-solid fa-arrow-down-short-wide"></i>

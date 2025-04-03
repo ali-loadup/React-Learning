@@ -16,7 +16,8 @@ import Pagination from "./PaginationControls";
 import { useDebounce } from "@uidotdev/usehooks";
 import { Toaster } from "react-hot-toast";
 import { RESULTS_PER_PAGE } from "../lib/constant";
-import { SortBy } from "../models/sortBy";
+import { SortBy } from "../types/sortBy";
+import { PaginationDirection } from "../types/paginationDirection";
 
 function App() {
   //state
@@ -45,7 +46,7 @@ function App() {
   );
 
   //event handlers
-  const handleChangePage = (direction: "next" | "prev") => {
+  const handleChangePage = (direction: PaginationDirection) => {
     if (direction === "next") {
       setCurrentPage((prev) => prev + 1);
     } else if (direction === "prev") {
