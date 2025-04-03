@@ -16,7 +16,7 @@ import Pagination from "./PaginationControls";
 
 function App() {
   const [searchText, setSearchText] = useState<string>("");
-  const { isLoading, jobs } = useJobs(searchText);
+  const [jobs, isLoading, totalCountOfResults] = useJobs(searchText);
 
   return (
     <>
@@ -33,7 +33,7 @@ function App() {
       <Container>
         <Sidebar>
           <SidebarTop>
-            <ResultsCount />
+            <ResultsCount totalCountOfRresults={totalCountOfResults} />
             <Sorting />
           </SidebarTop>
 

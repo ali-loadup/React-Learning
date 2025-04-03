@@ -10,4 +10,5 @@ export type Job = {
 
 export type JobProps = {
     job: Job;
+    isActive: boolean;
 }

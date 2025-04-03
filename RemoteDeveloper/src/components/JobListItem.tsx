@@ -1,9 +1,9 @@
 import { JobProps } from "../models/job";
 import BookmarkIcon from "./BookmarkIcon";
 
-export default function JobListItem({ job }: JobProps) {
+export default function JobListItem({ job, isActive }: JobProps) {
   return (
-    <li className="job-item">
+    <li className={`job-item ${isActive && "job-item--active"}`}>
       <a className="job-item__link" href={`#${job.id.toString()}`}>
         <div className="job-item__badge">{job.badgeLetters}</div>
 

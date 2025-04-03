@@ -6,6 +6,9 @@ export default function useJobs(searchText: string) {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const slicedJobs = jobs.slice(0, 7);
+  const totalCountOfResults = jobs.length;
+
   useEffect(() => {
     if (!searchText) return;
 
@@ -21,12 +24,12 @@ export default function useJobs(searchText: string) {
       }
       setIsLoading(false);
       const data = await response.json();
-      
-      setJobs(data.jobItems.slice(0, 7)); 
+
+      setJobs(data.jobItems);
     };
 
     getData();
   }, [searchText]);
 
-  return { jobs, isLoading };
+  return [slicedJobs, isLoading, totalCountOfResults] as const;
 }
