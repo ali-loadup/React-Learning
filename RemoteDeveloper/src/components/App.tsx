@@ -16,6 +16,7 @@ import Pagination from "./PaginationControls";
 import { useDebounce } from "@uidotdev/usehooks";
 import { Toaster } from "react-hot-toast";
 import { RESULTS_PER_PAGE } from "../lib/constant";
+import { SortBy } from "../models/sortBy";
 
 function App() {
   //state
@@ -23,11 +24,22 @@ function App() {
   const debouncedSearchText = useDebounce(searchText, 500);
   const [jobs, isLoading] = useJobs(debouncedSearchText);
   const [currntPage, setCurrentPage] = useState<number>(1);
+  const [sortBy, setSortBy] = useState<SortBy>("relevant");
 
   //derived state / computed state
   const totalCountOfResults = jobs?.length || 0;
   const totalNumberOfPages = totalCountOfResults / RESULTS_PER_PAGE;
-  const jobItemsSlice = jobs.slice(
+
+  const jobItemsSorted = jobs?.sort((a, b) => {
+    if (sortBy === "relevant") {
+      return b.relevanceScore - a.relevanceScore;
+    } else if (sortBy === "recent") {
+      return a.daysAgo - b.daysAgo;
+    }
+    return 0;
+  });
+
+  const jobItemsSlicedAndSorted = jobItemsSorted.slice(
     (currntPage - 1) * RESULTS_PER_PAGE,
     currntPage * RESULTS_PER_PAGE
   );
@@ -39,6 +51,10 @@ function App() {
     } else if (direction === "prev") {
       setCurrentPage((prev) => prev - 1);
     }
+  };
+
+  const handleChangeSort = (sortBy: SortBy) => {
+    setSortBy(sortBy);
   };
 
   return (
@@ -57,10 +73,10 @@ function App() {
         <Sidebar>
           <SidebarTop>
             <ResultsCount totalCountOfResults={totalCountOfResults} />
-            <Sorting />
+            <Sorting onClick={handleChangeSort} sortBy={sortBy} />
           </SidebarTop>
 
-          <JobList jobs={jobItemsSlice} isLoading={isLoading} />
+          <JobList jobs={jobItemsSlicedAndSorted} isLoading={isLoading} />
 
           <Pagination
             onClick={handleChangePage}
