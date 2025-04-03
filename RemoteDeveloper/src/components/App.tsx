@@ -18,7 +18,10 @@ import { useDebounce } from "@uidotdev/usehooks";
 function App() {
   const [searchText, setSearchText] = useState<string>("");
   const debouncedSearchText = useDebounce(searchText, 500);
-  const [jobs, isLoading, totalCountOfResults] = useJobs(debouncedSearchText);
+  const [jobs, isLoading] = useJobs(debouncedSearchText);
+
+  const totalCountOfResults = jobs?.length || 0;
+  const jobItemsSlice = jobs.slice(0, 7);
   return (
     <>
       <Background />
@@ -34,11 +37,11 @@ function App() {
       <Container>
         <Sidebar>
           <SidebarTop>
-            <ResultsCount totalCountOfRresults={totalCountOfResults} />
+            <ResultsCount totalCountOfResults={totalCountOfResults} />
             <Sorting />
           </SidebarTop>
 
-          <JobList jobs={jobs} isLoading={isLoading} />
+          <JobList jobs={jobItemsSlice} isLoading={isLoading} />
 
           <Pagination />
         </Sidebar>

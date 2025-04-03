@@ -1,35 +1,39 @@
-import { useEffect, useState } from "react";
 import { BASE_API_URL } from "../lib/constant";
 import { Job } from "../models/job";
+import { useQuery } from "@tanstack/react-query";
+
+type getJobsApiResponse = {
+  public: boolean;
+  sorted: boolean;
+  jobItems: Job[];
+};
+
+const getData = async (searchText: string): Promise<getJobsApiResponse> => {
+  let url = BASE_API_URL;
+  if (searchText.length > 0) url += `?search=${searchText}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  const data = await response.json();
+
+  return data;
+};
 
 export default function useJobs(searchText: string) {
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { data, isInitialLoading } = useQuery(
+    ["jobs-list", searchText],
+    () => (searchText.length > 0 ? getData(searchText) : null),
+    {
+      staleTime: 5000,
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: !!searchText,
+      onError: () => {},
+    }
+  );
 
-  const slicedJobs = jobs.slice(0, 7);
-  const totalCountOfResults = jobs.length;
-
-  useEffect(() => {
-    if (!searchText) return;
-
-    const getData = async () => {
-      console.warn("getData called with searchText:", searchText);
-
-      setIsLoading(true);
-      let url = BASE_API_URL;
-      if (searchText.length > 0) url += `?search=${searchText}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      setIsLoading(false);
-      const data = await response.json();
-
-      setJobs(data.jobItems);
-    };
-
-    getData();
-  }, [searchText]);
-
-  return [slicedJobs, isLoading, totalCountOfResults] as const;
+  const jobs = data?.jobItems || [];
+  const isLoading = isInitialLoading;
+  return [jobs, isLoading] as const;
 }
