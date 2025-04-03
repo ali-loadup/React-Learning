@@ -13,11 +13,12 @@ import ResultsCount from "./ResultsCount";
 import Sorting from "./SortingControls";
 import JobList from "./JobList";
 import Pagination from "./PaginationControls";
+import { useDebounce } from "@uidotdev/usehooks";
 
 function App() {
   const [searchText, setSearchText] = useState<string>("");
-  const [jobs, isLoading, totalCountOfResults] = useJobs(searchText);
-
+  const debouncedSearchText = useDebounce(searchText, 500);
+  const [jobs, isLoading, totalCountOfResults] = useJobs(debouncedSearchText);
   return (
     <>
       <Background />
