@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useMemo,
+} from "react";
 import { Job } from "../models/job";
 import { RESULTS_PER_PAGE } from "../lib/constant";
 import { PaginationDirection } from "../types/paginationDirection";
@@ -35,19 +41,21 @@ export const JobItemsContextProvider: React.FC<{ children: ReactNode }> = ({
   const totalCountOfResults = jobs?.length || 0;
   const totalNumberOfPages = totalCountOfResults / RESULTS_PER_PAGE;
 
-  const jobItemsSorted = [...(jobs || [])].sort((a, b) => {
-    if (sortBy === "relevant") {
-      return b.relevanceScore - a.relevanceScore;
-    } else if (sortBy === "recent") {
-      return a.daysAgo - b.daysAgo;
-    }
-    return 0;
-  });
+  const jobItemsSorted = useMemo(() =>
+    [...(jobs || [])].sort((a, b) => {
+      if (sortBy === "relevant") {
+        return b.relevanceScore - a.relevanceScore;
+      } else if (sortBy === "recent") {
+        return a.daysAgo - b.daysAgo;
+      }
+      return 0;
+    })
+  , [jobs, sortBy]);
 
-  const jobItemsSlicedAndSorted = jobItemsSorted.slice(
+  const jobItemsSlicedAndSorted = useMemo(()=> jobItemsSorted.slice(
     (currentPage - 1) * RESULTS_PER_PAGE,
     currentPage * RESULTS_PER_PAGE
-  );
+  ),[jobItemsSorted, currentPage]);
 
   //event handlers
   const handleChangePage = (direction: PaginationDirection) => {
