@@ -3,7 +3,7 @@ import Background from "./Background";
 import Container from "./Container";
 import Footer from "./Footer";
 import Header, { HeaderTop } from "./Header";
-import useJobs from "../hooks/UseJobs";
+import useSearchInJobs from "../hooks/UseSearchInJobs";
 import Logo from "./Logo";
 import BookmarksButton from "./BookmarksButton";
 import SearchForm from "./SearchForm";
@@ -23,7 +23,7 @@ function App() {
   //state
   const [searchText, setSearchText] = useState<string>("");
   const debouncedSearchText = useDebounce(searchText, 500);
-  const [jobs, isLoading] = useJobs(debouncedSearchText);
+  const {jobs, isLoading} = useSearchInJobs(debouncedSearchText);
   const [currntPage, setCurrentPage] = useState<number>(1);
   const [sortBy, setSortBy] = useState<SortBy>("relevant");
 
@@ -57,8 +57,6 @@ function App() {
   const handleChangeSort = (sortBy: SortBy) => {
     setSortBy(sortBy);
   };
-
-  
 
   return (
     <>
