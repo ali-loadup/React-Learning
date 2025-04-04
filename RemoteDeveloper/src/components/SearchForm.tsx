@@ -1,12 +1,7 @@
-type SearchFormProps = {
-  searchText: string;
-  setSearchText: (searchText: string) => void;
-};
+import { useSearchTextContext } from "../context/searchTextContextProvider";
 
-export default function SearchForm({
-  searchText,
-  setSearchText,
-}: SearchFormProps) {
+export default function SearchForm() {
+  const context = useSearchTextContext();
   return (
     <form
       action="#"
@@ -20,13 +15,13 @@ export default function SearchForm({
       </button>
 
       <input
-        value={searchText}
+        value={context.searchText}
         spellCheck="false"
         type="text"
         required
         placeholder="Find remote developer jobs..."
         onChange={(e) => {
-          setSearchText(e.target.value);
+          context.handleChangeSearchText(e.target.value);
         }}
       />
     </form>
