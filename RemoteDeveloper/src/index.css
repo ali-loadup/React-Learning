@@ -244,6 +244,7 @@ body::-webkit-scrollbar {
 
 /* JOB LIST */
 .job-list {
+  min-height: 140px;
   background-color: #fff;
   position: relative;
   /* height: 100%; */
