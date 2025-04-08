@@ -12,8 +12,11 @@ import Sorting from "./SortingControls";
 import Pagination from "./PaginationControls";
 import { Toaster } from "react-hot-toast";
 import JobListSearch from "./JobListSearch";
+import useActiveId from "../hooks/UseActiveId";
 
 function App() {
+  useActiveId();
+  
   return (
     <>
       <Background />

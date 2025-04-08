@@ -1,10 +1,11 @@
-import { useAvtiveIdContext } from "../context/activeIdContextProvider";
+import { useSelector } from "react-redux";
 import useSingleJob from "../hooks/UseSingleJob";
 import BookmarkIcon from "./BookmarkIcon";
 import Spinner from "./Spinner";
+import { RootState } from "../state/store";
 
 export default function JobItemContent() {
-  const {activeId} = useAvtiveIdContext();
+  const activeId = useSelector((state: RootState) => state.job.activeJobId);
 
   const { jobItem, isLoading } = useSingleJob(activeId);
 
@@ -36,7 +37,7 @@ export default function JobItemContent() {
               <div className="job-info__below-badge">
                 <time className="job-info__time">{jobItem.daysAgo}d</time>
 
-                <BookmarkIcon jobId={jobItem.id}  />
+                <BookmarkIcon jobId={jobItem.id} />
               </div>
             </div>
 

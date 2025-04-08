@@ -1,15 +1,23 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { setActiveJobId } from "../state/job/jobSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../state/store"; 
+import { AppDispatch } from "../state/store";
 
 export default function useActiveId() {
-  const [activeId, setActiveId] = React.useState<number | null>(null);
+  const activeId = useSelector((state: RootState) => state.job.activeJobId);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (window.location.hash && !activeId)
-      setActiveId(parseInt(window.location.hash.slice(1)));
+    if (window.location.hash && !activeId) {
+      dispatch(setActiveJobId(parseInt(window.location.hash.slice(1))));
+      console.log("active id has been set on page load.");
+    }
 
     const handleHashChange = () => {
       const id = window.location.hash.slice(1);
-      setActiveId(id ? parseInt(id) : null);
+      dispatch(setActiveJobId(id ? parseInt(id) : null));
+      console.log("active id has been set on hash change.");
     };
 
     window.addEventListener("hashchange", handleHashChange);

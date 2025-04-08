@@ -1,7 +1,9 @@
-import { useAvtiveIdContext } from "../context/activeIdContextProvider";
+// import { useAvtiveIdContext } from "../context/activeIdContextProvider";
 import { Job } from "../models/job";
 import JobListItem from "./JobListItem";
 import Spinner from "./Spinner";
+import { useSelector } from "react-redux";
+import { RootState } from "../state/store";
 
 type JobListProps = {
   jobs: Job[];
@@ -9,7 +11,7 @@ type JobListProps = {
 };
 
 export function JobList({ jobs, isLoading }: JobListProps) {
-  const {activeId} = useAvtiveIdContext();
+  const activeId = useSelector((state: RootState) => state.job.activeJobId);
   return (
     <>
       <ul className="job-list">
