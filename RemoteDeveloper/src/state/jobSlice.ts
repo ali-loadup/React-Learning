@@ -80,7 +80,6 @@ const jobSlice = createSlice({
   reducers: {
     setActiveJobId: (state, action: PayloadAction<number | null>) => {
       state.activeJobId = action.payload;
-      console.log("setActiveJobId", state.activeJobId);
     },
     setDebouncedSearchText: (state, action: PayloadAction<string>) => {
       state.debouncedSearchText = action.payload;

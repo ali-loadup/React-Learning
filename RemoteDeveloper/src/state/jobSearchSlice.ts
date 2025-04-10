@@ -20,8 +20,6 @@ const jobSearchSlice = createSlice({
   initialState,
   reducers: {
     setCurrentPage(state, action: PayloadAction<number>) {
-      console.log("setCurrentPage", action.payload);
-
       state.currentPage = action.payload;
     },
     setSortBy(state, action: PayloadAction<SortBy>) {

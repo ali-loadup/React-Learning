@@ -13,8 +13,6 @@ const initialState: BookmarkState = {
   bookmarkedJobs: [],
 };
 
-
-
 export const fetchBookmarkedJobs = createAsyncThunk(
   "bookmark/fetchBookmarkedJobs",
   async (bookmarks: number[], thunkAPI) => {
@@ -29,7 +27,7 @@ export const fetchBookmarkedJobs = createAsyncThunk(
     ).finally(() => {
       dispatch(setLoadingForBookmarkPopover(false));
     });
-
+    dispatch(setBookmarkedJobs(responses));
     return responses;
   }
 );
@@ -46,8 +44,11 @@ const bookmarkSlice = createSlice({
         state.bookmarks = [...state.bookmarks, action.payload];
       }
     },
+    setBookmarkedJobs: (state, action: PayloadAction<Job[]>) => {
+      state.bookmarkedJobs = action.payload;
+    },
   },
 });
 
-export const { toggleBookmark } = bookmarkSlice.actions;
+export const { toggleBookmark, setBookmarkedJobs } = bookmarkSlice.actions;
 export default bookmarkSlice.reducer;

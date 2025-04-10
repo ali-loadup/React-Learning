@@ -11,13 +11,11 @@ export default function useActiveId() {
   useEffect(() => {
     if (window.location.hash && !activeId) {
       dispatch(setActiveJobId(parseInt(window.location.hash.slice(1))));
-      console.log("active id has been set on page load.");
     }
 
     const handleHashChange = () => {
       const id = window.location.hash.slice(1);
       dispatch(setActiveJobId(id ? parseInt(id) : null));
-      console.log("active id has been set on hash change.");
     };
 
     window.addEventListener("hashchange", handleHashChange);
