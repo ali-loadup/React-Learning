@@ -1,9 +1,28 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { PaginationDirection } from "../types/paginationDirection";
-import { useJobItemsContext } from "../context/jobItemsContextProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../state/rootReducer";
+import { AppDispatch } from "../state/store";
+import { setCurrentPage } from "../state/jobSearchSlice";
 
 export default function Pagination() {
-  const {currentPage, totalNumberOfPages, handlechangePage} = useJobItemsContext();
+  const currentPage = useSelector(
+    (state: RootState) => state.jobSeacrh.currentPage
+  );
+  const dispatch = useDispatch<AppDispatch>();
+  const totalNumberOfPages = useSelector(
+    (state: RootState) => state.jobSeacrh.totalNumberOfPages
+  );
+
+  const handlechangePage = (direction: "prev" | "next") => {
+    if (direction === "prev") {
+      dispatch(setCurrentPage(currentPage - 1));
+    }
+    if (direction === "next") {
+      dispatch(setCurrentPage(currentPage + 1));
+    }
+  };
+
   return (
     <section className="pagination">
       {currentPage > 1 && (
@@ -30,6 +49,7 @@ type PaginationButtonProps = {
   currentPage: number;
   onClick: () => void;
 };
+
 function PaginationButton({
   direction,
   currentPage,

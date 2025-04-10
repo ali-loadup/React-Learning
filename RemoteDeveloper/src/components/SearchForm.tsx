@@ -1,7 +1,22 @@
-import { useSearchTextContext } from "../context/searchTextContextProvider";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../state/store";
+import { useDebounce } from "@uidotdev/usehooks";
+import { useEffect, useState } from "react";
+import { searchJobs, setDebouncedSearchText } from "../state/jobSlice";
 
 export default function SearchForm() {
-  const context = useSearchTextContext();
+  // const context = useSearchTextContext();
+
+  const [text, setText] = useState("");
+  const debouncedText = useDebounce(text, 250);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(setDebouncedSearchText(debouncedText));
+    dispatch(searchJobs(debouncedText));
+  }, [debouncedText, dispatch]);
+
   return (
     <form
       action="#"
@@ -15,13 +30,14 @@ export default function SearchForm() {
       </button>
 
       <input
-        value={context.searchText}
+        value={text}
         spellCheck="false"
         type="text"
         required
         placeholder="Find remote developer jobs..."
         onChange={(e) => {
-          context.handleChangeSearchText(e.target.value);
+          // context.handleChangeSearchText(e.target.value);
+          setText(e.target.value);
         }}
       />
     </form>

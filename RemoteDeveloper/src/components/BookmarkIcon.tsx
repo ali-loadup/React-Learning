@@ -1,7 +1,7 @@
 import { BookmarkFilledIcon } from "@radix-ui/react-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../state/store";
-import { toggleBookmark } from "../state/bookmark/bookmarkSlice";
+import { toggleBookmark } from "../state/bookmarkSlice";
 
 type BookmarkIconProps = {
   jobId: number;

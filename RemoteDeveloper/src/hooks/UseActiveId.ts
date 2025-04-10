@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { setActiveJobId } from "../state/job/jobSlice";
+import { setActiveJobId } from "../state/jobSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../state/store"; 
+import { RootState } from "../state/store";
 import { AppDispatch } from "../state/store";
 
 export default function useActiveId() {

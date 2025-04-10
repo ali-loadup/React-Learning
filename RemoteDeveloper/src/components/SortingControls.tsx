@@ -1,25 +1,30 @@
-import { useJobItemsContext } from "../context/jobItemsContextProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../state/store";
+import { RootState } from "../state/rootReducer";
+import { setSortBy } from "../state/jobSearchSlice";
 
 export default function Sorting() {
-  const context = useJobItemsContext();
+  const dispatch = useDispatch<AppDispatch>();
+  const sortBy = useSelector((state: RootState) => state.jobSeacrh.sortBy);
+
   return (
     <section className="sorting">
       <i className="fa-solid fa-arrow-down-short-wide"></i>
 
       <button
         className={`sorting__button sorting__button--relevant ${
-          context.sortBy === "relevant" && "sorting__button--active"
+          sortBy === "relevant" && "sorting__button--active"
         }`}
-        onClick={() => context.handleChangeSort("relevant")}
+        onClick={() => dispatch(setSortBy("relevant"))}
       >
         Relevant
       </button>
 
       <button
         className={`sorting__button sorting__button--recent ${
-          context.sortBy === "recent" && "sorting__button--active"
+          sortBy === "recent" && "sorting__button--active"
         }`}
-        onClick={() => context.handleChangeSort("recent")}
+        onClick={() => dispatch(setSortBy("recent"))}
       >
         Recent
       </button>

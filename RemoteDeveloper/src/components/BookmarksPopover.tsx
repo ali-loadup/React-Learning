@@ -9,7 +9,9 @@ export const BookmarksPopover = forwardRef<HTMLDivElement>(function (_, ref) {
     (state: RootState) => state.bookmark.bookmarkedJobs
   );
 
-  const isLoading = useSelector((state: RootState) => state.bookmark.isLoading);
+  const isLoading = useSelector(
+    (state: RootState) => state.ui.isLoadingForBookmarkPopover
+  );
 
   return createPortal(
     <div className="bookmarks-popover" ref={ref}>

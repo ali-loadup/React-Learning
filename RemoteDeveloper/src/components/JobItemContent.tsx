@@ -1,13 +1,33 @@
-import { useSelector } from "react-redux";
-import useSingleJob from "../hooks/UseSingleJob";
+import { useDispatch, useSelector } from "react-redux";
 import BookmarkIcon from "./BookmarkIcon";
 import Spinner from "./Spinner";
-import { RootState } from "../state/store";
+import { AppDispatch, RootState } from "../state/store";
+import { fetchSingleJob } from "../state/jobSlice";
+import { JobExpanded } from "../models/jobExpanded";
+import { useEffect, useState } from "react";
 
 export default function JobItemContent() {
   const activeId = useSelector((state: RootState) => state.job.activeJobId);
 
-  const { jobItem, isLoading } = useSingleJob(activeId);
+  const isLoading = useSelector(
+    (state: RootState) => state.ui.isLoadingForJobContent
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [jobItem, setJobItem] = useState<JobExpanded | null>(null);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      if (activeId === null) {
+        setJobItem(null);
+        return;
+      }
+      const result = await dispatch(fetchSingleJob(activeId)).unwrap();
+      setJobItem(result);
+    };
+    getUsers();
+  }, [dispatch, activeId]);
 
   if (isLoading) {
     return (

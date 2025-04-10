@@ -16,11 +16,10 @@ import useActiveId from "../hooks/UseActiveId";
 
 function App() {
   useActiveId();
-  
+
   return (
     <>
       <Background />
-
       <Header>
         <HeaderTop>
           <Logo />

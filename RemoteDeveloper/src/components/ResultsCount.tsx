@@ -1,7 +1,10 @@
-import { useJobItemsContext } from "../context/jobItemsContextProvider";
+import { useSelector } from "react-redux";
+import { RootState } from "../state/rootReducer";
 
 export default function ResultsCount() {
-  const { totalCountOfResults } = useJobItemsContext();
+  const count = useSelector(
+    (state: RootState) => state.jobSeacrh.totalCountOfResults
+  );
 
-  return <p className="count">{totalCountOfResults} results</p>;
+  return <p className="count">{count} results</p>;
 }
