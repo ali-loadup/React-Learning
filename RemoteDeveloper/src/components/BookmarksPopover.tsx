@@ -1,45 +1,35 @@
-import { forwardRef, useEffect, useState } from "react";
-import JobList from "./JobList";
+import { forwardRef } from "react";
 import { createPortal } from "react-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../state/store";
-import { setLoadingForBookmarkPopover } from "../state/uiSlice";
+import { useSelector } from "react-redux";
+import { useQueries } from "@tanstack/react-query";
+import { RootState } from "../state/store";
 import { Job } from "../models/job";
 import { BASE_API_URL } from "../lib/constant";
+import JobList from "./JobList";
 
 export const BookmarksPopover = forwardRef<HTMLDivElement>(function (_, ref) {
-  const [bookmarkedJobs, setBookmarkedJobs] = useState<Job[]>([]);
-
   const bookmarks = useSelector((state: RootState) => state.bookmark.bookmarks);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const jobQueries = useQueries({
+    queries: bookmarks.map((id) => ({
+      queryKey: ["job", id],
+      queryFn: async (): Promise<Job> => {
+        const response = await fetch(`${BASE_API_URL}/${id}`);
+        const data = await response.json();
+        return data.jobItem;
+      },
+      enabled: bookmarks.length > 0,
+    })),
+  });
 
-  useEffect(() => {
-    const fetchBookmarkedJobs = async () => {
-      dispatch(setLoadingForBookmarkPopover(true));
-
-      const responses: Job[] = await Promise.all(
-        bookmarks.map((id) =>
-          fetch(`${BASE_API_URL}/${id}`)
-            .then((res) => res.json())
-            .then((data) => data.jobItem)
-        )
-      ).finally(() => {
-        dispatch(setLoadingForBookmarkPopover(false));
-      });
-
-      setBookmarkedJobs(responses || []);
-    };
-    fetchBookmarkedJobs();
-  }, [bookmarks, dispatch]);
-
-  const isLoading = useSelector(
-    (state: RootState) => state.ui.isLoadingForBookmarkPopover
-  );
+  const isLoading = jobQueries.some((q) => q.isLoading);
+  const bookmarkedJobs = jobQueries
+    .map((q) => q.data)
+    .filter((job): job is Job => Boolean(job)); 
 
   return createPortal(
     <div className="bookmarks-popover" ref={ref}>
-      <JobList jobs={bookmarkedJobs} isLoading={isLoading}></JobList>
+      <JobList jobs={bookmarkedJobs} isLoading={isLoading} />
     </div>,
     document.body
   );
