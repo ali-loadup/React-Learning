@@ -1,7 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {  createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Job } from "../models/job";
-import { setLoadingForBookmarkPopover } from "./uiSlice";
-import { BASE_API_URL } from "../lib/constant";
 
 interface BookmarkState {
   bookmarks: number[];
@@ -12,25 +10,6 @@ const initialState: BookmarkState = {
   bookmarks: [],
   bookmarkedJobs: [],
 };
-
-export const fetchBookmarkedJobs = createAsyncThunk(
-  "bookmark/fetchBookmarkedJobs",
-  async (bookmarks: number[], thunkAPI) => {
-    const { dispatch } = thunkAPI;
-
-    dispatch(setLoadingForBookmarkPopover(true));
-
-    const responses: Job[] = await Promise.all(
-      bookmarks.map((id) =>
-        fetch(`${BASE_API_URL}/${id}`).then((res) => res.json())
-      )
-    ).finally(() => {
-      dispatch(setLoadingForBookmarkPopover(false));
-    });
-    dispatch(setBookmarkedJobs(responses));
-    return responses;
-  }
-);
 
 const bookmarkSlice = createSlice({
   name: "bookmark",
