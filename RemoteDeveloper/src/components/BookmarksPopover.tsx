@@ -6,6 +6,7 @@ import { RootState } from "../state/store";
 import { Job } from "../models/job";
 import { BASE_API_URL } from "../lib/constant";
 import JobList from "./JobList";
+import { handleError } from "../utils/errorHandler";
 
 export const BookmarksPopover = forwardRef<HTMLDivElement>(function (_, ref) {
   const bookmarks = useSelector((state: RootState) => state.bookmark.bookmarks);
@@ -15,6 +16,11 @@ export const BookmarksPopover = forwardRef<HTMLDivElement>(function (_, ref) {
       queryKey: ["job", id],
       queryFn: async (): Promise<Job> => {
         const response = await fetch(`${BASE_API_URL}/${id}`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          handleError(errorData);
+          throw new Error(errorData.description);
+        }
         const data = await response.json();
         return data.jobItem;
       },
@@ -25,7 +31,7 @@ export const BookmarksPopover = forwardRef<HTMLDivElement>(function (_, ref) {
   const isLoading = jobQueries.some((q) => q.isLoading);
   const bookmarkedJobs = jobQueries
     .map((q) => q.data)
-    .filter((job): job is Job => Boolean(job)); 
+    .filter((job): job is Job => Boolean(job));
 
   return createPortal(
     <div className="bookmarks-popover" ref={ref}>

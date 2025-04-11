@@ -1,14 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { JobExpanded } from "../models/jobExpanded";
 import { BASE_API_URL } from "../lib/constant";
-import { setLoadingForJobContent, setLoadingForJobsList } from "./uiSlice";
-import { handleError } from "../utils/errorHandler";
 import { Job } from "../models/job";
 import {
   setCurrentPage,
   setTotalCountOfResults,
   setTotalNumberOfPages,
 } from "./jobSearchSlice";
+import { setLoadingForJobsList } from "./uiSlice";
 
 interface JobState {
   activeJobId: number | null;
@@ -22,10 +20,6 @@ const initialState: JobState = {
   jobs: [],
 };
 
-// type JobItemApiResponse = {
-//   public: boolean;
-//   jobItem: JobExpanded;
-// };
 
 export const searchJobs = createAsyncThunk(
   "job/searchJobs",
@@ -53,26 +47,6 @@ export const searchJobs = createAsyncThunk(
   }
 );
 
-export const fetchSingleJob = createAsyncThunk(
-  "job/fetchJobSingleJob",
-
-  async (id: number, thunkAPI): Promise<JobExpanded> => {
-    const { dispatch } = thunkAPI;
-    dispatch(setLoadingForJobContent(true));
-
-    const response = await fetch(`${BASE_API_URL}/${id}`);
-    if (!response.ok) {
-      const errorData = await response.json();
-      dispatch(setLoadingForJobContent(false));
-      handleError(errorData.description);
-      throw new Error(errorData.description);
-    }
-    dispatch(setLoadingForJobContent(false));
-    const data = await response.json();
-    const jobItem = data?.jobItem;
-    return jobItem;
-  }
-);
 
 const jobSlice = createSlice({
   name: "job",
@@ -95,20 +69,3 @@ const jobSlice = createSlice({
 export const { setActiveJobId, setDebouncedSearchText } = jobSlice.actions;
 
 export default jobSlice.reducer;
-
-// export default function useSingleJob(id: number | null) {
-//   const { data, isInitialLoading } = useQuery(
-//     ["job-item", id],
-//     () => (id ? fetchJobSingleJob(id) : null),
-//     {
-//       staleTime: 5000,
-//       refetchOnWindowFocus: false,
-//       retry: false,
-//       enabled: !!id,
-//       onError: handleError,
-//     }
-//   );
-//   const jobItem = data?.jobItem;
-//   const isLoading = isInitialLoading;
-//   return { jobItem, isLoading };
-// }
